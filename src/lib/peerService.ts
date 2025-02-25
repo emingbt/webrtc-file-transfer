@@ -1,3 +1,4 @@
+import { IncomingData } from "@/interface"
 import Peer, { DataConnection } from "peerjs"
 
 class PeerService {
@@ -7,6 +8,7 @@ class PeerService {
   createPeer(
     onOpen: (id: string) => void,
     onConnection: (conn: DataConnection) => void,
+    onData?: (data: IncomingData) => void,
     onConnectionClose?: () => void
   ) {
     if (this.peer) return // Prevent multiple instances
@@ -24,6 +26,7 @@ class PeerService {
 
       conn.on("data", (data) => {
         console.log("Received data:", data)
+        if (onData) onData(data as IncomingData)
       })
 
       conn.on("close", () => {
@@ -44,7 +47,7 @@ class PeerService {
 
   connectToPeer(
     remotePeerId: string,
-    onData: (data: any) => void,
+    onData: (data: IncomingData) => void,
     onOpen?: () => void,
     onClose?: () => void,
     onTimeout?: () => void
@@ -75,7 +78,7 @@ class PeerService {
 
     conn.on("data", (data) => {
       console.log("Received data:", data)
-      onData(data)
+      onData(data as IncomingData)
     })
 
     conn.on("close", () => {

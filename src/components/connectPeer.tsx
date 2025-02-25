@@ -1,11 +1,15 @@
+"use client"
+
 import React, { useState } from "react"
 import type { DataConnection } from "peerjs"
+import type { IncomingData } from "@/interface"
 import { peerService } from "@/lib/peerService"
 import { toast } from "sonner"
 import { X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
+import IncomingFileDialog from "./incomingFileDialog"
 
 export default function ConnectPeer({ connection, setConnection }: {
   connection: DataConnection | null,
@@ -13,6 +17,8 @@ export default function ConnectPeer({ connection, setConnection }: {
 }) {
   const [isLoadingConnect, setIsLoadingConnect] = useState(false)
   const [remotePeerId, setRemotePeerId] = useState<string | null>(null)
+  const [incomingData, setIncomingData] = useState<IncomingData | null>(null)
+  const [isAlertDialogOpen, setIsAlertDialogOpen] = useState(false)
 
   const connectToPeer = () => {
     console.log("Connecting to:", remotePeerId)
@@ -20,7 +26,8 @@ export default function ConnectPeer({ connection, setConnection }: {
     setIsLoadingConnect(true)
 
     const connection = peerService.connectToPeer(remotePeerId, (data) => {
-      console.log("Received data:", data)
+      setIncomingData(data)
+      setIsAlertDialogOpen(true)
     }, () => {
       console.log("Connection open")
       if (connection) setConnection(connection)
@@ -51,22 +58,48 @@ export default function ConnectPeer({ connection, setConnection }: {
 
       setIsLoadingConnect(false)
     }
+  }
 
+  const sendFile = () => {
+    console.log("Sending file to peer")
+    if (!connection) return
+
+    const file = document.getElementById("file") as HTMLInputElement
+    if (file.files && file.files.length > 0) {
+      const fileData = file.files[0]
+      connection?.send({
+        name: fileData.name,
+        type: fileData.type,
+        size: fileData.size,
+        file: fileData
+      })
+    }
   }
 
   return (
     connection ? (
-      <section className="w-full flex flex-col p-8">
-        <p>Connect to a peer</p>
-        <Separator className="mb-4" />
-        <div className="w-full flex items-center gap-4 space-x-2">
-          <p><strong>Connected to:</strong> {connection.peer}</p>
-          <Button variant="destructive" onClick={() => {
-            connection.close()
-            setConnection(null)
-          }}>Disconnect</Button>
-        </div>
-      </section>
+      <>
+        <section className="w-full flex flex-col p-8">
+          <p>Connect to a peer</p>
+          <Separator className="mb-4" />
+          <div className="w-full flex items-center gap-4 space-x-2">
+            <p><strong>Connected to:</strong> {connection.peer}</p>
+            <Button variant="destructive" onClick={() => {
+              connection.close()
+              setConnection(null)
+            }}>Disconnect</Button>
+          </div>
+        </section>
+        <section className="w-full flex flex-col p-8">
+          <p>Send a file to peer</p>
+          <Separator className="mb-4" />
+          <div className="w-full flex items-center gap-4 space-x-2">
+            <Input id="file" type="file" />
+            <Button onClick={sendFile}>Send</Button>
+          </div>
+        </section>
+        <IncomingFileDialog data={incomingData} open={isAlertDialogOpen} setOpen={setIsAlertDialogOpen} />
+      </>
     )
       :
       (
