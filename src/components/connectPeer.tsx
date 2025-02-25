@@ -65,6 +65,7 @@ export default function ConnectPeer({ connection, setConnection }: {
       connection?.send({
         name: fileData.name,
         type: fileData.type,
+        size: fileData.size,
         file: fileData
       })
     }
