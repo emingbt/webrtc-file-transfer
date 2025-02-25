@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { Copy, X } from "lucide-react"
 import { toast } from "sonner"
+import ConnectPeer from "@/components/connectPeer"
 
 export default function Home() {
   const [peerId, setPeerId] = useState<string | null>(null)
@@ -60,6 +61,10 @@ export default function Home() {
           </>
         )}
       </section>
+      {peerId && (
+        <ConnectPeer connection={connection} setConnection={setConnection} />
+      )
+      }
     </main>
   )
 }
