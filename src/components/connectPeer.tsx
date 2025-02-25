@@ -51,7 +51,21 @@ export default function ConnectPeer({ connection, setConnection }: {
 
       setIsLoadingConnect(false)
     }
+  }
 
+  const sendFile = () => {
+    console.log("Sending file to peer")
+    if (!connection) return
+
+    const file = document.getElementById("file") as HTMLInputElement
+    if (file.files && file.files.length > 0) {
+      const fileData = file.files[0]
+      connection?.send({
+        name: fileData.name,
+        type: fileData.type,
+        file: fileData
+      })
+    }
   }
 
   return (
