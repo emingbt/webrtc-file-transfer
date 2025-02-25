@@ -6,6 +6,7 @@ import { X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
+import fileDownload from "js-file-download"
 
 export default function ConnectPeer({ connection, setConnection }: {
   connection: DataConnection | null,
@@ -20,7 +21,8 @@ export default function ConnectPeer({ connection, setConnection }: {
     setIsLoadingConnect(true)
 
     const connection = peerService.connectToPeer(remotePeerId, (data) => {
-      console.log("Received data:", data)
+      console.log("Received data on connect peer:", data)
+      fileDownload(data.file, data.name, data.type)
     }, () => {
       console.log("Connection open")
       if (connection) setConnection(connection)
