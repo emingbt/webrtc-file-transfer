@@ -27,7 +27,7 @@ export default function Home() {
       setConnection(conn)
     }, (data) => {
       setIncomingData(data)
-      setIsAlertDialogOpen(data)
+      setIsAlertDialogOpen(true)
     }, () => {
       setConnection(null)
     })
@@ -44,8 +44,8 @@ export default function Home() {
         {peerId ? (
           <div className="w-full flex items-center gap-2">
             <p>Your ID: {peerId}</p>
-            <Button variant="outline" onClick={() => {
-              navigator.clipboard.writeText(peerId)
+            <Button variant="outline" onClick={async () => {
+              await navigator.clipboard.writeText(peerId)
               toast("Copied to clipboard", {
                 action: {
                   label: <X className="w-4 h-4" />,

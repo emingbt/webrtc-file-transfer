@@ -2,6 +2,7 @@
 
 import React, { useState } from "react"
 import type { DataConnection } from "peerjs"
+import type { IncomingData } from "@/interface"
 import { peerService } from "@/lib/peerService"
 import { toast } from "sonner"
 import { X } from "lucide-react"
@@ -16,7 +17,7 @@ export default function ConnectPeer({ connection, setConnection }: {
 }) {
   const [isLoadingConnect, setIsLoadingConnect] = useState(false)
   const [remotePeerId, setRemotePeerId] = useState<string | null>(null)
-  const [incomingData, setIncomingData] = useState<any | null>(null)
+  const [incomingData, setIncomingData] = useState<IncomingData | null>(null)
   const [isAlertDialogOpen, setIsAlertDialogOpen] = useState(false)
 
   const connectToPeer = () => {
@@ -26,7 +27,7 @@ export default function ConnectPeer({ connection, setConnection }: {
 
     const connection = peerService.connectToPeer(remotePeerId, (data) => {
       setIncomingData(data)
-      setIsAlertDialogOpen(data)
+      setIsAlertDialogOpen(true)
     }, () => {
       console.log("Connection open")
       if (connection) setConnection(connection)
