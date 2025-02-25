@@ -7,6 +7,7 @@ class PeerService {
   createPeer(
     onOpen: (id: string) => void,
     onConnection: (conn: DataConnection) => void,
+    onData?: (data: any) => void,
     onConnectionClose?: () => void
   ) {
     if (this.peer) return // Prevent multiple instances
@@ -24,6 +25,7 @@ class PeerService {
 
       conn.on("data", (data) => {
         console.log("Received data:", data)
+        if (onData) onData(data)
       })
 
       conn.on("close", () => {
