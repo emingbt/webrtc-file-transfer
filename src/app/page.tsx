@@ -31,8 +31,8 @@ export default function Home() {
   }
 
   return (
-    <main className="w-full">
-      <section className="w-full flex flex-col p-8 rounded-md border-2 shadow-md">
+    <main className="w-full rounded-md border-2 shadow-md">
+      <section className="w-full flex flex-col p-8">
         {peerId ? (
           <div className="w-full flex items-center gap-2">
             <p>Your ID: {peerId}</p>
@@ -52,7 +52,7 @@ export default function Home() {
           </div>
         ) : (
           <>
-            <p>Start to get your peer id to connect with other peers</p>
+            <p>Start to get your peer id</p>
             <Separator className="mb-4" />
             <Button className="w-20" disabled={isLoading} onClick={createPeer}>
               {isLoading ? "Starting..." : "Start"}
