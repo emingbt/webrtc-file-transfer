@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useState } from "react"
 import type { DataConnection } from "peerjs"
 import { peerService } from "@/lib/peerService"
@@ -6,7 +8,7 @@ import { X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
-import fileDownload from "js-file-download"
+import IncomingFileDialog from "./incomingFileDialog"
 
 export default function ConnectPeer({ connection, setConnection }: {
   connection: DataConnection | null,
@@ -14,6 +16,8 @@ export default function ConnectPeer({ connection, setConnection }: {
 }) {
   const [isLoadingConnect, setIsLoadingConnect] = useState(false)
   const [remotePeerId, setRemotePeerId] = useState<string | null>(null)
+  const [incomingData, setIncomingData] = useState<any | null>(null)
+  const [isAlertDialogOpen, setIsAlertDialogOpen] = useState(false)
 
   const connectToPeer = () => {
     console.log("Connecting to:", remotePeerId)
@@ -21,8 +25,8 @@ export default function ConnectPeer({ connection, setConnection }: {
     setIsLoadingConnect(true)
 
     const connection = peerService.connectToPeer(remotePeerId, (data) => {
-      console.log("Received data on connect peer:", data)
-      fileDownload(data.file, data.name, data.type)
+      setIncomingData(data)
+      setIsAlertDialogOpen(data)
     }, () => {
       console.log("Connection open")
       if (connection) setConnection(connection)
@@ -93,6 +97,7 @@ export default function ConnectPeer({ connection, setConnection }: {
             <Button onClick={sendFile}>Send</Button>
           </div>
         </section>
+        <IncomingFileDialog data={incomingData} open={isAlertDialogOpen} setOpen={setIsAlertDialogOpen} />
       </>
     )
       :

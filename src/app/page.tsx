@@ -1,6 +1,7 @@
 "use client"
 
 import type { DataConnection } from "peerjs"
+import type { IncomingData } from "@/interface"
 import { useState } from "react"
 import { peerService } from "@/lib/peerService"
 import { Button } from "@/components/ui/button"
@@ -8,11 +9,14 @@ import { Separator } from "@/components/ui/separator"
 import { Copy, X } from "lucide-react"
 import { toast } from "sonner"
 import ConnectPeer from "@/components/connectPeer"
+import IncomingFileDialog from "@/components/incomingFileDialog"
 
 export default function Home() {
   const [peerId, setPeerId] = useState<string | null>(null)
   const [connection, setConnection] = useState<DataConnection | null>(null)
   const [isLoadingStart, setIsLoadingStart] = useState(false)
+  const [incomingData, setIncomingData] = useState<IncomingData | null>(null)
+  const [isAlertDialogOpen, setIsAlertDialogOpen] = useState(false)
 
   const createPeer = () => {
     setIsLoadingStart(true)
@@ -21,6 +25,9 @@ export default function Home() {
       setIsLoadingStart(false)
     }, (conn) => {
       setConnection(conn)
+    }, (data) => {
+      setIncomingData(data)
+      setIsAlertDialogOpen(data)
     }, () => {
       setConnection(null)
     })
@@ -65,6 +72,7 @@ export default function Home() {
         <ConnectPeer connection={connection} setConnection={setConnection} />
       )
       }
+      <IncomingFileDialog data={incomingData} open={isAlertDialogOpen} setOpen={setIsAlertDialogOpen} />
     </main>
   )
 }
