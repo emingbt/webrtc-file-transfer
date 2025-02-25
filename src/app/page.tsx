@@ -2,6 +2,7 @@
 
 import Peer from "peerjs"
 import { useState, useRef } from "react"
+import { peerService } from "@/lib/peerService"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { Copy, XCircle } from "lucide-react"
@@ -14,24 +15,20 @@ export default function Home() {
   const peerRef = useRef<Peer | null>(null)
 
   const createPeer = () => {
-    if (peerRef.current) return
-    setIsLoading(true)
-    const peer = new Peer()
-    peerRef.current = peer
-
-    peer.on("open", (id) => {
+    setIsLoadingStart(true)
+    peerService.createPeer((id) => {
       setPeerId(id)
       setIsLoading(false)
+    }, (conn) => {
+      setConnection(conn)
+    }, () => {
+      setConnection(null)
     })
   }
 
   const destroyPeer = () => {
-    if (peerRef.current) {
-      peerRef.current.destroy()
-      console.log("Peer destroyed", peerRef.current)
-      peerRef.current = null
-      setPeerId(null)
-    }
+    peerService.destroyPeer()
+    setPeerId(null)
   }
 
   return (
