@@ -5,7 +5,7 @@ import { useState, useRef } from "react"
 import { peerService } from "@/lib/peerService"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
-import { Copy, XCircle } from "lucide-react"
+import { Copy, X } from "lucide-react"
 import { toast } from "sonner"
 
 export default function Home() {
@@ -41,7 +41,7 @@ export default function Home() {
               navigator.clipboard.writeText(peerId)
               toast("Copied to clipboard", {
                 action: {
-                  label: <XCircle className="w-5 h-5" />,
+                  label: <X className="w-4 h-4" />,
                   onClick: () => {
                     toast.dismiss()
                   }
