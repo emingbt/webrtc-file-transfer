@@ -11,13 +11,13 @@ import { toast } from "sonner"
 export default function Home() {
   const [peerId, setPeerId] = useState<string | null>(null)
   const [connection, setConnection] = useState<DataConnection | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoadingStart, setIsLoadingStart] = useState(false)
 
   const createPeer = () => {
     setIsLoadingStart(true)
     peerService.createPeer((id) => {
       setPeerId(id)
-      setIsLoading(false)
+      setIsLoadingStart(false)
     }, (conn) => {
       setConnection(conn)
     }, () => {
@@ -54,8 +54,8 @@ export default function Home() {
           <>
             <p>Start to get your peer id</p>
             <Separator className="mb-4" />
-            <Button className="w-20" disabled={isLoading} onClick={createPeer}>
-              {isLoading ? "Starting..." : "Start"}
+            <Button className="w-20" disabled={isLoadingStart} onClick={createPeer}>
+              {isLoadingStart ? "Starting..." : "Start"}
             </Button>
           </>
         )}
