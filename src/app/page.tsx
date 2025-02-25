@@ -1,7 +1,7 @@
 "use client"
 
-import Peer from "peerjs"
-import { useState, useRef } from "react"
+import type { DataConnection } from "peerjs"
+import { useState } from "react"
 import { peerService } from "@/lib/peerService"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
@@ -12,7 +12,6 @@ export default function Home() {
   const [peerId, setPeerId] = useState<string | null>(null)
   const [connection, setConnection] = useState<DataConnection | null>(null)
   const [isLoading, setIsLoading] = useState(false)
-  const peerRef = useRef<Peer | null>(null)
 
   const createPeer = () => {
     setIsLoadingStart(true)
