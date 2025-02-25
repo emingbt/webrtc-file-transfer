@@ -56,17 +56,27 @@ export default function ConnectPeer({ connection, setConnection }: {
 
   return (
     connection ? (
-      <section className="w-full flex flex-col p-8">
-        <p>Connect to a peer</p>
-        <Separator className="mb-4" />
-        <div className="w-full flex items-center gap-4 space-x-2">
-          <p><strong>Connected to:</strong> {connection.peer}</p>
-          <Button variant="destructive" onClick={() => {
-            connection.close()
-            setConnection(null)
-          }}>Disconnect</Button>
-        </div>
-      </section>
+      <>
+        <section className="w-full flex flex-col p-8">
+          <p>Connect to a peer</p>
+          <Separator className="mb-4" />
+          <div className="w-full flex items-center gap-4 space-x-2">
+            <p><strong>Connected to:</strong> {connection.peer}</p>
+            <Button variant="destructive" onClick={() => {
+              connection.close()
+              setConnection(null)
+            }}>Disconnect</Button>
+          </div>
+        </section>
+        <section className="w-full flex flex-col p-8">
+          <p>Send a file to peer</p>
+          <Separator className="mb-4" />
+          <div className="w-full flex items-center gap-4 space-x-2">
+            <Input id="file" type="file" />
+            <Button onClick={sendFile}>Send</Button>
+          </div>
+        </section>
+      </>
     )
       :
       (
