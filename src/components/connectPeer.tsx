@@ -22,7 +22,6 @@ export default function ConnectPeer({ connection, setConnection }: {
   const [isFileSent, setIsFileSent] = useState(false)
 
   const connectToPeer = () => {
-    console.log("Connecting to:", remotePeerId)
     if (!remotePeerId) return
     setIsLoadingConnect(true)
 
@@ -31,21 +30,14 @@ export default function ConnectPeer({ connection, setConnection }: {
       setIncomingData(data)
       setIsAlertDialogOpen(true)
     }, () => {
-      console.log("Connection open")
       if (connection) setConnection(connection)
       setIsLoadingConnect(false)
     }, () => {
-      console.log("Connection closed")
       setConnection(null)
     }, () => {
-      console.log("Connection timeout: Failed to connect within 5 seconds")
       setIsLoadingConnect(false)
     }
     )
-
-    console.log("Connection", connection)
-
-    console.log("Is Connected:", peerService.isConnected())
 
     if (!connection) {
       toast(`Error connecting to user with id: ${remotePeerId}`, {
@@ -63,7 +55,6 @@ export default function ConnectPeer({ connection, setConnection }: {
   }
 
   const sendFile = () => {
-    console.log("Sending file to peer")
     if (!connection) return
 
     const file = document.getElementById("file") as HTMLInputElement
