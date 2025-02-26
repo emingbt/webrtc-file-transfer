@@ -22,29 +22,22 @@ export default function ConnectPeer({ connection, setConnection }: {
   const [isFileSent, setIsFileSent] = useState(false)
 
   const connectToPeer = () => {
-    console.log("Connecting to:", remotePeerId)
     if (!remotePeerId) return
     setIsLoadingConnect(true)
 
     const connection = peerService.connectToPeer(remotePeerId, (data) => {
+      document.title = `Incoming File (1) | emin's file transfer`
       setIncomingData(data)
       setIsAlertDialogOpen(true)
     }, () => {
-      console.log("Connection open")
       if (connection) setConnection(connection)
       setIsLoadingConnect(false)
     }, () => {
-      console.log("Connection closed")
       setConnection(null)
     }, () => {
-      console.log("Connection timeout: Failed to connect within 5 seconds")
       setIsLoadingConnect(false)
     }
     )
-
-    console.log("Connection", connection)
-
-    console.log("Is Connected:", peerService.isConnected())
 
     if (!connection) {
       toast(`Error connecting to user with id: ${remotePeerId}`, {
@@ -62,12 +55,13 @@ export default function ConnectPeer({ connection, setConnection }: {
   }
 
   const sendFile = () => {
-    console.log("Sending file to peer")
     if (!connection) return
 
     const file = document.getElementById("file") as HTMLInputElement
     if (file.files && file.files.length > 0) {
       const fileData = file.files[0]
+      setIsFileSent(true)
+
       connection?.send({
         name: fileData.name,
         type: fileData.type,
@@ -95,12 +89,8 @@ export default function ConnectPeer({ connection, setConnection }: {
           <p>Send a file to peer</p>
           <Separator className="mb-4" />
           <div className="w-full flex flex-col md:flex-row items-end md:items-center gap-4 space-x-2">
-            <Input id="file" type="file" onChange={() => setIsFileSent(false)} />
-            <Button disabled={isFileSent} onClick={() => {
-              setIsFileSent(true)
-              sendFile()
-            }}
-            >
+            <Input id="file" type="file" onFocus={() => setIsFileSent(false)} />
+            <Button disabled={isFileSent} onClick={sendFile}>
               {isFileSent ? "Sent" : "Send"}
             </Button>
           </div>

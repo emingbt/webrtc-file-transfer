@@ -35,11 +35,14 @@ export default function IncomingFileDialog({ data, open, setOpen }: {
         </AlertDialogDescription>
         <AlertDialogFooter>
           <AlertDialogAction onClick={() => {
+            document.title = "emin's file transfer"
             if (data) {
               fileDownload(data.file, data.name, data.type)
             }
           }}>Download</AlertDialogAction>
-          <AlertDialogCancel>Close</AlertDialogCancel>
+          <AlertDialogCancel onClick={() => {
+            document.title = "emin's file transfer"
+          }}>Close</AlertDialogCancel>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
