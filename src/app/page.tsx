@@ -6,10 +6,9 @@ import { useState } from "react"
 import { peerService } from "@/lib/peerService"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
-import { Copy, X } from "lucide-react"
-import { toast } from "sonner"
 import ConnectPeer from "@/components/connectPeer"
 import IncomingFileDialog from "@/components/incomingFileDialog"
+import CopyButton from "@/components/copyButton"
 
 export default function Home() {
   const [peerId, setPeerId] = useState<string | null>(null)
@@ -42,21 +41,12 @@ export default function Home() {
     <main className="w-full rounded-md border-2 shadow-md">
       <section className="w-full flex flex-col p-8">
         {peerId ? (
-          <div className="w-full flex items-center gap-2">
-            <p>Your ID: {peerId}</p>
-            <Button variant="outline" onClick={async () => {
-              await navigator.clipboard.writeText(peerId)
-              toast("Copied to clipboard", {
-                action: {
-                  label: <X className="w-4 h-4" />,
-                  onClick: () => {
-                    toast.dismiss()
-                  }
-                },
-                duration: 1500
-              })
-            }}><Copy /></Button>
-            {peerId && <Button variant="destructive" onClick={destroyPeer}>Stop</Button>}
+          <div className="w-full flex items-center justify-between">
+            <p><strong>Your ID:</strong> {peerId}</p>
+            <div className="flex items-center space-x-2">
+              <CopyButton peerId={peerId} />
+              {peerId && <Button variant="destructive" onClick={destroyPeer}>Stop</Button>}
+            </div>
           </div>
         ) : (
           <>
