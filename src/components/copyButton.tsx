@@ -21,6 +21,8 @@ export default function CopyButton({ peerId }: { peerId: string }) {
             duration: 1500,
           })
         } catch (error) {
+          console.log("There is an error on copy button:", error)
+
           // Fallback for mobile browsers that block clipboard API
           const textArea = document.createElement("textarea")
           textArea.value = peerId

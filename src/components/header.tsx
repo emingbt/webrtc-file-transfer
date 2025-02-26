@@ -16,7 +16,7 @@ export default function Header() {
             n
           </span>
         </p>
-        's file transfer
+        &apos;s file transfer
       </h1>
       <nav className="flex gap-4">
         <a href="https://www.github.com/emingbt/webrtc-file-transfer" className="font-semibold hover:underline">GitHub</a>
