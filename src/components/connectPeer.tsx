@@ -19,6 +19,7 @@ export default function ConnectPeer({ connection, setConnection }: {
   const [remotePeerId, setRemotePeerId] = useState<string | null>(null)
   const [incomingData, setIncomingData] = useState<IncomingData | null>(null)
   const [isAlertDialogOpen, setIsAlertDialogOpen] = useState(false)
+  const [isFileSent, setIsFileSent] = useState(false)
 
   const connectToPeer = () => {
     console.log("Connecting to:", remotePeerId)
@@ -82,7 +83,7 @@ export default function ConnectPeer({ connection, setConnection }: {
         <section className="w-full flex flex-col p-8">
           <p>Connect to a peer</p>
           <Separator className="mb-4" />
-          <div className="w-full flex items-center gap-4 space-x-2">
+          <div className="w-full flex items-center justify-between">
             <p><strong>Connected to:</strong> {connection.peer}</p>
             <Button variant="destructive" onClick={() => {
               connection.close()
@@ -93,9 +94,15 @@ export default function ConnectPeer({ connection, setConnection }: {
         <section className="w-full flex flex-col p-8">
           <p>Send a file to peer</p>
           <Separator className="mb-4" />
-          <div className="w-full flex items-center gap-4 space-x-2">
-            <Input id="file" type="file" />
-            <Button onClick={sendFile}>Send</Button>
+          <div className="w-full flex flex-col md:flex-row items-end md:items-center gap-4 space-x-2">
+            <Input id="file" type="file" onChange={() => setIsFileSent(false)} />
+            <Button disabled={isFileSent} onClick={() => {
+              setIsFileSent(true)
+              sendFile()
+            }}
+            >
+              {isFileSent ? "Sent" : "Send"}
+            </Button>
           </div>
         </section>
         <IncomingFileDialog data={incomingData} open={isAlertDialogOpen} setOpen={setIsAlertDialogOpen} />
