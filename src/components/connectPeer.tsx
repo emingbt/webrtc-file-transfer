@@ -27,6 +27,7 @@ export default function ConnectPeer({ connection, setConnection }: {
     setIsLoadingConnect(true)
 
     const connection = peerService.connectToPeer(remotePeerId, (data) => {
+      document.title = `Incoming File (1) | emin's file transfer`
       setIncomingData(data)
       setIsAlertDialogOpen(true)
     }, () => {
