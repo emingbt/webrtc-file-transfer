@@ -69,6 +69,8 @@ export default function ConnectPeer({ connection, setConnection }: {
     const file = document.getElementById("file") as HTMLInputElement
     if (file.files && file.files.length > 0) {
       const fileData = file.files[0]
+      setIsFileSent(true)
+
       connection?.send({
         name: fileData.name,
         type: fileData.type,
@@ -96,12 +98,8 @@ export default function ConnectPeer({ connection, setConnection }: {
           <p>Send a file to peer</p>
           <Separator className="mb-4" />
           <div className="w-full flex flex-col md:flex-row items-end md:items-center gap-4 space-x-2">
-            <Input id="file" type="file" onChange={() => setIsFileSent(false)} />
-            <Button disabled={isFileSent} onClick={() => {
-              setIsFileSent(true)
-              sendFile()
-            }}
-            >
+            <Input id="file" type="file" onFocus={() => setIsFileSent(false)} />
+            <Button disabled={isFileSent} onClick={sendFile}>
               {isFileSent ? "Sent" : "Send"}
             </Button>
           </div>
