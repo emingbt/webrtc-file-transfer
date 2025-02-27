@@ -53,6 +53,12 @@ class PeerService {
     }
 
     const conn = this.peer.connect(remotePeerId)
+
+    if (!conn) {
+      console.error("Error connecting to user with id:", remotePeerId)
+      return
+    }
+
     let isOpened = false
 
     const timeout = setTimeout(() => {
