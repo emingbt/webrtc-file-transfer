@@ -89,8 +89,8 @@ export default function ConnectPeer({ connection, setConnection }: {
           <p>Send a file to peer</p>
           <Separator className="mb-4" />
           <div className="w-full flex flex-col md:flex-row items-end md:items-center gap-4 space-x-2">
-            <Input id="file" type="file" onFocus={() => setIsFileSent(false)} />
-            <Button disabled={isFileSent} onClick={sendFile}>
+            <Input id="file" type="file" onClick={() => setIsFileSent(false)} />
+            <Button disabled={isFileSent} onClick={sendFile} onBlur={() => setIsFileSent(false)}>
               {isFileSent ? "Sent" : "Send"}
             </Button>
           </div>
