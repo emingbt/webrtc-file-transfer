@@ -30,6 +30,14 @@ class PeerService {
         if (onConnectionClose) onConnectionClose()
       })
     })
+
+    this.peer.on("error", (error) => {
+      console.log("Peer error:", error)
+    })
+
+    this.peer.on("disconnected", () => {
+      this.peer?.reconnect()
+    })
   }
 
   destroyPeer() {
