@@ -25,7 +25,6 @@ export default function Home() {
     }, (conn) => {
       setConnection(conn)
     }, (data) => {
-      document.title = `Incoming File (1) | emin's file transfer`
       setIncomingData(data)
       setIsAlertDialogOpen(true)
     }, () => {

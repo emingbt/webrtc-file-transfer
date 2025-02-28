@@ -1,6 +1,7 @@
 "use client"
 
 import type { IncomingData } from '../interface'
+import { useEffect } from 'react'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,6 +20,23 @@ export default function IncomingFileDialog({ data, open, setOpen }: {
   open: boolean,
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
 }) {
+
+  useEffect(() => {
+    // Render the incoming file dialog only client-side
+    if (typeof window === 'undefined') return
+    if (open) {
+      document.title = `Incoming File (1) | emin's file transfer`
+      const audio = new Audio("/audio/incoming-file-alert-sound.wav")
+      audio.play().catch(error => {
+        console.error("Audio playback failed:", error)
+      })
+    } else {
+      document.title = `emin's file transfer`
+    }
+  }
+    , [open])
+
+
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogContent>
