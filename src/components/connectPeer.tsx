@@ -103,9 +103,13 @@ export default function ConnectPeer({ connection, setConnection }: {
           <p>Connect to a peer</p>
           <Separator className="mb-4" />
           <div className="w-full flex items-center gap-4 space-x-2">
-            <Input placeholder="Peer ID" onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setRemotePeerId(event.target.value)
-            }} />
+            <Input
+              placeholder="Peer ID"
+              autoCapitalize="none"
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                setRemotePeerId(event.target.value)
+              }}
+            />
             <Button onClick={connectToPeer} disabled={isLoadingConnect}>
               {isLoadingConnect ? "Connecting..." : "Connect"}
             </Button>

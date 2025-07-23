@@ -67,6 +67,7 @@ export default function Home() {
                   placeholder="Enter username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
+                  autoCapitalize="none"
                   className="mr-4"
                 />
                 <Button
