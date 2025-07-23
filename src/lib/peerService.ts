@@ -6,6 +6,7 @@ class PeerService {
   private connection: DataConnection | null = null
 
   createPeer(
+    username: string,
     onOpen: (id: string) => void,
     onConnection: (conn: DataConnection) => void,
     onData?: (data: IncomingData) => void,
@@ -13,7 +14,7 @@ class PeerService {
   ) {
     if (this.peer) return // Prevent multiple instances
 
-    this.peer = new Peer()
+    this.peer = new Peer(username)
 
     this.peer.on("open", (id) => {
       onOpen(id) // Notify component that peer is ready
