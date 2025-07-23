@@ -6,6 +6,7 @@ class PeerService {
   private connection: DataConnection | null = null
 
   createPeer(
+    username: string,
     onOpen: (id: string) => void,
     onConnection: (conn: DataConnection) => void,
     onData?: (data: IncomingData) => void,
@@ -13,7 +14,20 @@ class PeerService {
   ) {
     if (this.peer) return // Prevent multiple instances
 
-    this.peer = new Peer()
+    this.tryCreatePeerWithId(username, 0, onOpen, onConnection, onData, onConnectionClose)
+  }
+
+  private tryCreatePeerWithId(
+    baseUsername: string,
+    attempt: number,
+    onOpen: (id: string) => void,
+    onConnection: (conn: DataConnection) => void,
+    onData?: (data: IncomingData) => void,
+    onConnectionClose?: () => void
+  ) {
+    const currentId = attempt === 0 ? baseUsername : `${baseUsername}-${attempt}`
+
+    this.peer = new Peer(currentId)
 
     this.peer.on("open", (id) => {
       onOpen(id) // Notify component that peer is ready
@@ -33,6 +47,15 @@ class PeerService {
 
     this.peer.on("error", (error) => {
       console.log("Peer error:", error)
+
+      // If the error is due to ID already taken, try with next increment
+      if (error.type === 'unavailable-id' && attempt < 10) { // Limit attempts to prevent infinite loop
+        this.peer?.destroy()
+        this.peer = null
+        setTimeout(() => {
+          this.tryCreatePeerWithId(baseUsername, attempt + 1, onOpen, onConnection, onData, onConnectionClose)
+        }, 100) // Small delay before retry
+      }
     })
 
     this.peer.on("disconnected", () => {
